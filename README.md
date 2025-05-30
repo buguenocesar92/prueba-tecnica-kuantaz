@@ -231,17 +231,41 @@ php artisan test --coverage
 
 ### Swagger/OpenAPI
 
-La API está documentada usando anotaciones Swagger. Para generar la documentación:
+El proyecto incluye documentación interactiva de la API usando **Swagger/OpenAPI 3.0**.
 
+#### Generar Documentación
 ```bash
+# Generar documentación Swagger
 php artisan l5-swagger:generate
 ```
 
-### Acceder a la Documentación
+#### Acceder a la Documentación
+Una vez que el servidor esté corriendo:
 
-Una vez generada, la documentación estará disponible en:
-```
-http://127.0.0.1:8000/api/documentation
+- **Interfaz Swagger**: `http://127.0.0.1:8000/api/documentation`
+- **Redirección desde raíz**: `http://127.0.0.1:8000/`
+- **Ruta alternativa**: `http://127.0.0.1:8000/docs`
+- **JSON API Docs**: `http://127.0.0.1:8000/docs/api-docs.json`
+
+#### Características de la Documentación
+
+- ✅ **Interfaz interactiva** para probar endpoints
+- ✅ **Ejemplos de respuesta** con datos reales
+- ✅ **Esquemas detallados** de request/response
+- ✅ **Descripciones completas** de cada campo
+- ✅ **Códigos de error** y manejo de excepciones
+- ✅ **Información del proyecto** y contacto
+
+#### Comandos Útiles
+```bash
+# Regenerar documentación después de cambios
+php artisan l5-swagger:generate
+
+# Limpiar cache de documentación
+php artisan l5-swagger:generate --force
+
+# Ver configuración de Swagger
+php artisan config:show l5-swagger
 ```
 
 ## 📁 Estructura del Proyecto
