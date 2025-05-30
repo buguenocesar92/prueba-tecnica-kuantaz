@@ -8,8 +8,9 @@ use Illuminate\Support\Facades\Http;
 
 class FiltrosRepository implements FiltrosRepositoryInterface
 {
-    private string $apiUrl;
-    private int $timeout;
+    private readonly string $apiUrl;
+
+    private readonly int $timeout;
 
     public function __construct()
     {
@@ -21,24 +22,23 @@ class FiltrosRepository implements FiltrosRepositoryInterface
     {
         try {
             $response = Http::timeout($this->timeout)->get($this->apiUrl);
-            
-            if (!$response->successful()) {
+
+            if (! $response->successful()) {
                 throw new \Exception("Error al obtener filtros: HTTP {$response->status()}");
             }
 
             $data = $response->json();
-            
-            if (!isset($data['data']) || !is_array($data['data'])) {
-                throw new \Exception("Formato de respuesta inválido para filtros");
+
+            if (! isset($data['data']) || ! is_array($data['data'])) {
+                throw new \Exception('Formato de respuesta inválido para filtros');
             }
 
             return array_map(
-                fn(array $item) => FiltroDTO::fromArray($item),
+                fn (array $item): \App\DTOs\FiltroDTO => FiltroDTO::fromArray($item),
                 $data['data']
             );
-
         } catch (\Exception $e) {
-            throw new \Exception("Error al obtener filtros: " . $e->getMessage());
+            throw new \Exception('Error al obtener filtros: '.$e->getMessage(), $e->getCode(), $e);
         }
     }
-} 
+}

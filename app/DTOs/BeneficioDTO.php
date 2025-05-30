@@ -36,7 +36,7 @@ class BeneficioDTO
             'fecha' => $this->fecha,
             'ano' => $this->ano,
             'view' => $this->view,
-            'ficha' => $this->ficha?->toArray()
+            'ficha' => $this->ficha?->toArray(),
         ];
     }
 
@@ -70,4 +70,4 @@ class BeneficioDTO
     {
         return (int) date('Y', strtotime($this->fecha));
     }
-} 
+}

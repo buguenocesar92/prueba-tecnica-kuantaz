@@ -30,7 +30,7 @@ class FiltroDTO
             'tramite' => $this->tramite,
             'min' => $this->min,
             'max' => $this->max,
-            'ficha_id' => $this->ficha_id
+            'ficha_id' => $this->ficha_id,
         ];
     }
 
@@ -38,4 +38,4 @@ class FiltroDTO
     {
         return $monto >= $this->min && $monto <= $this->max;
     }
-} 
+}

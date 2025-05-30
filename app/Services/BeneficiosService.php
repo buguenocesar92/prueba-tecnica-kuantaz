@@ -3,11 +3,9 @@
 namespace App\Services;
 
 use App\DTOs\BeneficioDTO;
-use App\DTOs\FiltroDTO;
-use App\DTOs\FichaDTO;
 use App\Repositories\Interfaces\BeneficiosRepositoryInterface;
-use App\Repositories\Interfaces\FiltrosRepositoryInterface;
 use App\Repositories\Interfaces\FichasRepositoryInterface;
+use App\Repositories\Interfaces\FiltrosRepositoryInterface;
 use Illuminate\Support\Collection;
 
 class BeneficiosService
@@ -20,8 +18,7 @@ class BeneficiosService
 
     /**
      * Procesa los beneficios aplicando filtros y agrupando por año
-     * 
-     * @return array
+     *
      * @throws \Exception
      */
     public function procesarBeneficios(): array
@@ -37,7 +34,7 @@ class BeneficiosService
 
         // Procesar beneficios
         $beneficiosProcesados = $this->aplicarFiltrosYFichas($beneficios, $filtrosIndexados, $fichasIndexadas);
-        
+
         // Agrupar por año y calcular totales
         return $this->agruparPorAnoYCalcularTotales($beneficiosProcesados);
     }
@@ -62,23 +59,25 @@ class BeneficiosService
      * Aplica filtros de monto y asocia fichas a los beneficios
      */
     private function aplicarFiltrosYFichas(
-        array $beneficios, 
-        Collection $filtrosIndexados, 
+        array $beneficios,
+        Collection $filtrosIndexados,
         Collection $fichasIndexadas
     ): array {
         $beneficiosValidos = [];
 
         foreach ($beneficios as $beneficio) {
             $filtro = $filtrosIndexados->get($beneficio->id_programa);
-            
             // Verificar si existe filtro y si el monto es válido
-            if (!$filtro || !$filtro->isMontoValid($beneficio->monto)) {
+            if (! $filtro) {
+                continue;
+            }
+            if (! $filtro->isMontoValid($beneficio->monto)) {
                 continue;
             }
 
             // Buscar y asociar ficha
             $ficha = $fichasIndexadas->get($filtro->ficha_id);
-            if (!$ficha) {
+            if (! $ficha) {
                 continue;
             }
 
@@ -100,22 +99,22 @@ class BeneficiosService
     {
         return collect($beneficios)
             ->groupBy('ano')
-            ->map(function (Collection $beneficiosPorAno, string $ano) {
+            ->map(function (Collection $beneficiosPorAno, string $ano): array {
                 $beneficiosOrdenados = $beneficiosPorAno
                     ->sortBy('fecha')
                     ->values()
-                    ->map(fn(BeneficioDTO $beneficio) => $beneficio->toArray())
+                    ->map(fn (BeneficioDTO $beneficio): array => $beneficio->toArray())
                     ->toArray();
 
                 return [
                     'ano' => $ano,
                     'total_monto' => $beneficiosPorAno->sum('monto'),
                     'num' => $beneficiosPorAno->count(),
-                    'beneficios' => $beneficiosOrdenados
+                    'beneficios' => $beneficiosOrdenados,
                 ];
             })
             ->sortByDesc('ano')
             ->values()
             ->toArray();
     }
-} 
+}

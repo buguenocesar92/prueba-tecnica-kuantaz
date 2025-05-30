@@ -8,8 +8,9 @@ use Illuminate\Support\Facades\Http;
 
 class FichasRepository implements FichasRepositoryInterface
 {
-    private string $apiUrl;
-    private int $timeout;
+    private readonly string $apiUrl;
+
+    private readonly int $timeout;
 
     public function __construct()
     {
@@ -21,24 +22,23 @@ class FichasRepository implements FichasRepositoryInterface
     {
         try {
             $response = Http::timeout($this->timeout)->get($this->apiUrl);
-            
-            if (!$response->successful()) {
+
+            if (! $response->successful()) {
                 throw new \Exception("Error al obtener fichas: HTTP {$response->status()}");
             }
 
             $data = $response->json();
-            
-            if (!isset($data['data']) || !is_array($data['data'])) {
-                throw new \Exception("Formato de respuesta inválido para fichas");
+
+            if (! isset($data['data']) || ! is_array($data['data'])) {
+                throw new \Exception('Formato de respuesta inválido para fichas');
             }
 
             return array_map(
-                fn(array $item) => FichaDTO::fromArray($item),
+                fn (array $item): \App\DTOs\FichaDTO => FichaDTO::fromArray($item),
                 $data['data']
             );
-
         } catch (\Exception $e) {
-            throw new \Exception("Error al obtener fichas: " . $e->getMessage());
+            throw new \Exception('Error al obtener fichas: '.$e->getMessage(), $e->getCode(), $e);
         }
     }
-} 
+}

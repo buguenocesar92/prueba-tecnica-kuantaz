@@ -30,4 +30,4 @@ class RepositoryServiceProvider extends ServiceProvider
     {
         //
     }
-} 
+}

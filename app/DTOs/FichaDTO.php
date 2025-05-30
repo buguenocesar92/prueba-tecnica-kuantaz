@@ -33,7 +33,7 @@ class FichaDTO
             'id_programa' => $this->id_programa,
             'url' => $this->url,
             'categoria' => $this->categoria,
-            'descripcion' => $this->descripcion
+            'descripcion' => $this->descripcion,
         ];
     }
-} 
+}

@@ -8,8 +8,9 @@ use Illuminate\Support\Facades\Http;
 
 class BeneficiosRepository implements BeneficiosRepositoryInterface
 {
-    private string $apiUrl;
-    private int $timeout;
+    private readonly string $apiUrl;
+
+    private readonly int $timeout;
 
     public function __construct()
     {
@@ -21,24 +22,23 @@ class BeneficiosRepository implements BeneficiosRepositoryInterface
     {
         try {
             $response = Http::timeout($this->timeout)->get($this->apiUrl);
-            
-            if (!$response->successful()) {
+
+            if (! $response->successful()) {
                 throw new \Exception("Error al obtener beneficios: HTTP {$response->status()}");
             }
 
             $data = $response->json();
-            
-            if (!isset($data['data']) || !is_array($data['data'])) {
-                throw new \Exception("Formato de respuesta inválido para beneficios");
+
+            if (! isset($data['data']) || ! is_array($data['data'])) {
+                throw new \Exception('Formato de respuesta inválido para beneficios');
             }
 
             return array_map(
-                fn(array $item) => BeneficioDTO::fromArray($item),
+                fn (array $item): \App\DTOs\BeneficioDTO => BeneficioDTO::fromArray($item),
                 $data['data']
             );
-
         } catch (\Exception $e) {
-            throw new \Exception("Error al obtener beneficios: " . $e->getMessage());
+            throw new \Exception('Error al obtener beneficios: '.$e->getMessage(), $e->getCode(), $e);
         }
     }
-} 
+}
