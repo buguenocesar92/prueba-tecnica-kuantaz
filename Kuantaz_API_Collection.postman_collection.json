@@ -30,14 +30,11 @@
 									"// Verificar estructura de la respuesta",
 									"pm.test(\"Response has correct structure\", function () {",
 									"    const jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('code');",
-									"    pm.expect(jsonData).to.have.property('success');",
-									"    pm.expect(jsonData).to.have.property('data');",
-									"    pm.expect(jsonData.data).to.be.an('array');",
+									"    pm.expect(jsonData).to.be.an('array');",
 									"    ",
-									"    if (jsonData.data.length > 0) {",
-									"        const firstItem = jsonData.data[0];",
-									"        pm.expect(firstItem).to.have.property('year');",
+									"    if (jsonData.length > 0) {",
+									"        const firstItem = jsonData[0];",
+									"        pm.expect(firstItem).to.have.property('ano');",
 									"        pm.expect(firstItem).to.have.property('total_monto');",
 									"        pm.expect(firstItem).to.have.property('num');",
 									"        pm.expect(firstItem).to.have.property('beneficios');",
@@ -48,23 +45,23 @@
 									"// Verificar que los años estén ordenados descendentemente",
 									"pm.test(\"Years are sorted in descending order\", function () {",
 									"    const jsonData = pm.response.json();",
-									"    if (jsonData.data.length > 1) {",
-									"        for (let i = 0; i < jsonData.data.length - 1; i++) {",
-									"            pm.expect(jsonData.data[i].year).to.be.at.least(jsonData.data[i + 1].year);",
+									"    if (jsonData.length > 1) {",
+									"        for (let i = 0; i < jsonData.length - 1; i++) {",
+									"            pm.expect(parseInt(jsonData[i].ano)).to.be.at.least(parseInt(jsonData[i + 1].ano));",
 									"        }",
 									"    }",
 									"});",
 									"",
 									"// Mostrar resumen en consola",
 									"const responseJson = pm.response.json();",
-									"if (responseJson.success && responseJson.data) {",
+									"if (responseJson && responseJson.length > 0) {",
 									"    console.log(`📊 Resumen de Beneficios Procesados:`);",
-									"    console.log(`📅 Años procesados: ${responseJson.data.length}`);",
-									"    responseJson.data.forEach(year => {",
-									"        console.log(`   ${year.year}: ${year.num} beneficios, $${year.total_monto.toLocaleString()}`);",
+									"    console.log(`📅 Años procesados: ${responseJson.length}`);",
+									"    responseJson.forEach(year => {",
+									"        console.log(`   ${year.ano}: ${year.num} beneficios, $${year.total_monto.toLocaleString()}`);",
 									"    });",
 									"} else {",
-									"    console.log(`❌ Error en la respuesta: ${responseJson.message || 'Error desconocido'}`);",
+									"    console.log(`❌ No se encontraron datos o respuesta vacía`);",
 									"}"
 								],
 								"type": "text/javascript"
@@ -96,7 +93,7 @@
 								"beneficios-procesados"
 							]
 						},
-						"description": "**Endpoint principal** que procesa y agrupa los beneficios por año.\n\n### Funcionalidades:\n- ✅ Consume 3 APIs externas (beneficios, filtros, fichas)\n- ✅ Filtra beneficios por montos mínimos y máximos\n- ✅ Agrupa por año y calcula totales\n- ✅ Ordena por año descendente\n- ✅ Incluye información de fichas\n\n### Respuesta esperada:\n```json\n{\n  \"code\": 200,\n  \"success\": true,\n  \"data\": [\n    {\n      \"year\": 2023,\n      \"total_monto\": 295608,\n      \"num\": 8,\n      \"beneficios\": [\n        {\n          \"id_programa\": 147,\n          \"monto\": 40656,\n          \"fecha_recepcion\": \"09/11/2023\",\n          \"fecha\": \"2023-11-09\",\n          \"ano\": \"2023\",\n          \"view\": true,\n          \"ficha\": {\n            \"id\": 922,\n            \"nombre\": \"Emprende\",\n            \"id_programa\": 147,\n            \"url\": \"emprende\",\n            \"categoria\": \"trabajo\",\n            \"descripcion\": \"Fondos concursables para nuevos negocios\"\n          }\n        }\n      ]\n    }\n  ]\n}\n```"
+						"description": "**Endpoint principal** que procesa y agrupa los beneficios por año.\n\n### Funcionalidades:\n- ✅ Consume 3 APIs externas (beneficios, filtros, fichas)\n- ✅ Filtra beneficios por montos mínimos y máximos\n- ✅ Agrupa por año y calcula totales\n- ✅ Ordena por año descendente\n- ✅ Incluye información de fichas\n\n### Respuesta esperada:\n```json\n[\n  {\n    \"ano\": \"2023\",\n    \"total_monto\": 295608,\n    \"num\": 8,\n    \"beneficios\": [\n      {\n        \"id_programa\": 147,\n        \"monto\": 40656,\n        \"fecha_recepcion\": \"09/11/2023\",\n        \"fecha\": \"2023-11-09\",\n        \"ano\": \"2023\",\n        \"view\": true,\n        \"ficha\": {\n          \"id\": 922,\n          \"nombre\": \"Emprende\",\n          \"id_programa\": 147,\n          \"url\": \"emprende\",\n          \"categoria\": \"trabajo\",\n          \"descripcion\": \"Fondos concursables para nuevos negocios\"\n        }\n      }\n    ]\n  },\n  {\n    \"ano\": \"2022\",\n    \"total_monto\": 49254,\n    \"num\": 1,\n    \"beneficios\": [\n      {\n        \"id_programa\": 130,\n        \"monto\": 49254,\n        \"fecha_recepcion\": \"11/10/2022\",\n        \"fecha\": \"2022-10-11\",\n        \"ano\": \"2022\",\n        \"view\": true,\n        \"ficha\": {\n          \"id\": 2042,\n          \"nombre\": \"Subsidio Familiar (SUF)\",\n          \"id_programa\": 130,\n          \"url\": \"subsidio_familiar_suf\",\n          \"categoria\": \"bonos\",\n          \"descripcion\": \"Beneficio económico mensual entregado a madres, padres o tutores que no cuentan con previsión social.\"\n        }\n      }\n    ]\n  }\n]\n```"
 					},
 					"response": [
 						{
@@ -132,7 +129,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n  \"code\": 200,\n  \"success\": true,\n  \"data\": [\n    {\n      \"year\": 2023,\n      \"total_monto\": 295608,\n      \"num\": 8,\n      \"beneficios\": [\n        {\n          \"id_programa\": 147,\n          \"monto\": 40656,\n          \"fecha_recepcion\": \"09/11/2023\",\n          \"fecha\": \"2023-11-09\",\n          \"ano\": \"2023\",\n          \"view\": true,\n          \"ficha\": {\n            \"id\": 922,\n            \"nombre\": \"Emprende\",\n            \"id_programa\": 147,\n            \"url\": \"emprende\",\n            \"categoria\": \"trabajo\",\n            \"descripcion\": \"Fondos concursables para nuevos negocios\"\n          }\n        }\n      ]\n    }\n  ]\n}"
+							"body": "[\n  {\n    \"ano\": \"2023\",\n    \"total_monto\": 295608,\n    \"num\": 8,\n    \"beneficios\": [\n      {\n        \"id_programa\": 147,\n        \"monto\": 40656,\n        \"fecha_recepcion\": \"09/11/2023\",\n        \"fecha\": \"2023-11-09\",\n        \"ano\": \"2023\",\n        \"view\": true,\n        \"ficha\": {\n          \"id\": 922,\n          \"nombre\": \"Emprende\",\n          \"id_programa\": 147,\n          \"url\": \"emprende\",\n          \"categoria\": \"trabajo\",\n          \"descripcion\": \"Fondos concursables para nuevos negocios\"\n        }\n      }\n    ]\n  },\n  {\n    \"ano\": \"2022\",\n    \"total_monto\": 49254,\n    \"num\": 1,\n    \"beneficios\": [\n      {\n        \"id_programa\": 130,\n        \"monto\": 49254,\n        \"fecha_recepcion\": \"11/10/2022\",\n        \"fecha\": \"2022-10-11\",\n        \"ano\": \"2022\",\n        \"view\": true,\n        \"ficha\": {\n          \"id\": 2042,\n          \"nombre\": \"Subsidio Familiar (SUF)\",\n          \"id_programa\": 130,\n          \"url\": \"subsidio_familiar_suf\",\n          \"categoria\": \"bonos\",\n          \"descripcion\": \"Beneficio económico mensual entregado a madres, padres o tutores que no cuentan con previsión social.\"\n        }\n      }\n    ]\n  }\n]"
 						}
 					]
 				}
