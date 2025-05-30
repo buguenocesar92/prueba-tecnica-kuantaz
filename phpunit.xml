@@ -24,7 +24,6 @@
             <directory>app/Console</directory>
             <directory>app/Exceptions</directory>
             <directory>app/Http/Kernel.php</directory>
-            <directory>app/Providers</directory>
         </exclude>
     </source>
     

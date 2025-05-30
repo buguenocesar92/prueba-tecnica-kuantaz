@@ -1,7 +1,7 @@
 # 🚀 Prueba Técnica Kuantaz - API de Beneficios
 
 [![CI](https://github.com/buguenocesar92/prueba-tecnica-kuantaz/actions/workflows/ci.yml/badge.svg)](https://github.com/buguenocesar92/prueba-tecnica-kuantaz/actions)
-[![Coverage](https://img.shields.io/badge/coverage-88%25-brightgreen)](https://github.com/buguenocesar92/prueba-tecnica-kuantaz)
+[![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://github.com/buguenocesar92/prueba-tecnica-kuantaz)
 [![PHPStan](https://img.shields.io/badge/PHPStan-level%205-brightgreen)](https://phpstan.org/)
 [![Laravel Pint](https://img.shields.io/badge/Laravel%20Pint-passing-brightgreen)](https://laravel.com/docs/pint)
 [![Tests](https://img.shields.io/badge/tests-16%20passing-brightgreen)](https://github.com/buguenocesar92/prueba-tecnica-kuantaz)
