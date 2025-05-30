@@ -77,6 +77,13 @@
         "ci": [
             "@analyse",
             "@test-coverage"
+        ],
+        "update-coverage-badge": [
+            "php scripts/update-coverage-badge.php"
+        ],
+        "coverage-badge": [
+            "@test-coverage",
+            "@update-coverage-badge"
         ]
     },
     "extra": {

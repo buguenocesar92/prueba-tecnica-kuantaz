@@ -1,5 +1,13 @@
 # 🚀 Prueba Técnica Kuantaz - API de Beneficios
 
+[![CI](https://github.com/TU_USUARIO/prueba-tecnica-kuantaz/workflows/CI/badge.svg)](https://github.com/TU_USUARIO/prueba-tecnica-kuantaz/actions)
+[![Coverage](https://img.shields.io/badge/coverage-88%25-brightgreen)](https://github.com/TU_USUARIO/prueba-tecnica-kuantaz)
+[![PHPStan](https://img.shields.io/badge/PHPStan-level%205-brightgreen)](https://phpstan.org/)
+[![Laravel Pint](https://img.shields.io/badge/Laravel%20Pint-passing-brightgreen)](https://laravel.com/docs/pint)
+[![Tests](https://img.shields.io/badge/tests-16%20passing-brightgreen)](https://github.com/TU_USUARIO/prueba-tecnica-kuantaz)
+[![PHP Version](https://img.shields.io/badge/php-%5E8.2-blue)](https://php.net)
+[![Laravel](https://img.shields.io/badge/laravel-12.x-red)](https://laravel.com)
+
 API REST desarrollada en Laravel para el procesamiento y gestión de beneficios sociales. Este proyecto consume datos de endpoints externos, los procesa aplicando filtros de montos mínimos y máximos, y los presenta agrupados por año con información detallada de fichas.
 
 ## 📋 Tabla de Contenidos
@@ -277,7 +285,7 @@ composer quality
 composer ci
 ```
 
-## �� Documentación API
+## 🔧 Documentación API
 
 ### Swagger/OpenAPI
 
