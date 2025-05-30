@@ -9,11 +9,26 @@ use Tests\TestCase;
 
 class BeneficiosTest extends TestCase
 {
+    private function getBeneficiosUrl()
+    {
+        return env('BENEFICIOS_API_URL', 'https://run.mocky.io/v3/8f75c4b5-ad90-49bb-bc52-f1fc0b4aad02');
+    }
+
+    private function getFiltrosUrl()
+    {
+        return env('FILTROS_API_URL', 'https://run.mocky.io/v3/b0ddc735-cfc9-410e-9365-137e04e33fcf');
+    }
+
+    private function getFichasUrl()
+    {
+        return env('FICHAS_API_URL', 'https://run.mocky.io/v3/4654cafa-58d8-4846-9256-79841b29a687');
+    }
+
     public function test_beneficios_procesados_endpoint_returns_correct_structure()
     {
         // Mock de los datos de respuesta de los endpoints externos
         Http::fake([
-            'https://run.mocky.io/v3/8f75c4b5-ad90-49bb-bc52-f1fc0b4aad02' => Http::response([
+            $this->getBeneficiosUrl() => Http::response([
                 'code' => 200,
                 'success' => true,
                 'data' => [
@@ -32,7 +47,7 @@ class BeneficiosTest extends TestCase
                 ]
             ], 200),
             
-            'https://run.mocky.io/v3/b0ddc735-cfc9-410e-9365-137e04e33fcf' => Http::response([
+            $this->getFiltrosUrl() => Http::response([
                 'code' => 200,
                 'success' => true,
                 'data' => [
@@ -53,7 +68,7 @@ class BeneficiosTest extends TestCase
                 ]
             ], 200),
             
-            'https://run.mocky.io/v3/4654cafa-58d8-4846-9256-79841b29a687' => Http::response([
+            $this->getFichasUrl() => Http::response([
                 'code' => 200,
                 'success' => true,
                 'data' => [
@@ -114,7 +129,7 @@ class BeneficiosTest extends TestCase
     public function test_beneficios_procesados_filters_by_min_max_amounts()
     {
         Http::fake([
-            'https://run.mocky.io/v3/8f75c4b5-ad90-49bb-bc52-f1fc0b4aad02' => Http::response([
+            $this->getBeneficiosUrl() => Http::response([
                 'code' => 200,
                 'success' => true,
                 'data' => [
@@ -133,7 +148,7 @@ class BeneficiosTest extends TestCase
                 ]
             ], 200),
             
-            'https://run.mocky.io/v3/b0ddc735-cfc9-410e-9365-137e04e33fcf' => Http::response([
+            $this->getFiltrosUrl() => Http::response([
                 'code' => 200,
                 'success' => true,
                 'data' => [
@@ -147,7 +162,7 @@ class BeneficiosTest extends TestCase
                 ]
             ], 200),
             
-            'https://run.mocky.io/v3/4654cafa-58d8-4846-9256-79841b29a687' => Http::response([
+            $this->getFichasUrl() => Http::response([
                 'code' => 200,
                 'success' => true,
                 'data' => [
@@ -177,7 +192,7 @@ class BeneficiosTest extends TestCase
     public function test_beneficios_procesados_orders_by_year_desc()
     {
         Http::fake([
-            'https://run.mocky.io/v3/8f75c4b5-ad90-49bb-bc52-f1fc0b4aad02' => Http::response([
+            $this->getBeneficiosUrl() => Http::response([
                 'code' => 200,
                 'success' => true,
                 'data' => [
@@ -196,7 +211,7 @@ class BeneficiosTest extends TestCase
                 ]
             ], 200),
             
-            'https://run.mocky.io/v3/b0ddc735-cfc9-410e-9365-137e04e33fcf' => Http::response([
+            $this->getFiltrosUrl() => Http::response([
                 'code' => 200,
                 'success' => true,
                 'data' => [
@@ -210,7 +225,7 @@ class BeneficiosTest extends TestCase
                 ]
             ], 200),
             
-            'https://run.mocky.io/v3/4654cafa-58d8-4846-9256-79841b29a687' => Http::response([
+            $this->getFichasUrl() => Http::response([
                 'code' => 200,
                 'success' => true,
                 'data' => [
@@ -240,7 +255,7 @@ class BeneficiosTest extends TestCase
     public function test_beneficios_procesados_calculates_total_amount_correctly()
     {
         Http::fake([
-            'https://run.mocky.io/v3/8f75c4b5-ad90-49bb-bc52-f1fc0b4aad02' => Http::response([
+            $this->getBeneficiosUrl() => Http::response([
                 'code' => 200,
                 'success' => true,
                 'data' => [
@@ -259,7 +274,7 @@ class BeneficiosTest extends TestCase
                 ]
             ], 200),
             
-            'https://run.mocky.io/v3/b0ddc735-cfc9-410e-9365-137e04e33fcf' => Http::response([
+            $this->getFiltrosUrl() => Http::response([
                 'code' => 200,
                 'success' => true,
                 'data' => [
@@ -273,7 +288,7 @@ class BeneficiosTest extends TestCase
                 ]
             ], 200),
             
-            'https://run.mocky.io/v3/4654cafa-58d8-4846-9256-79841b29a687' => Http::response([
+            $this->getFichasUrl() => Http::response([
                 'code' => 200,
                 'success' => true,
                 'data' => [
@@ -303,7 +318,7 @@ class BeneficiosTest extends TestCase
     public function test_external_api_failure_returns_error()
     {
         Http::fake([
-            'https://run.mocky.io/v3/8f75c4b5-ad90-49bb-bc52-f1fc0b4aad02' => Http::response([], 500)
+            $this->getBeneficiosUrl() => Http::response([], 500)
         ]);
 
         $response = $this->getJson('/api/v1/beneficios-procesados');
@@ -318,7 +333,7 @@ class BeneficiosTest extends TestCase
     public function test_beneficios_without_valid_filters_are_excluded()
     {
         Http::fake([
-            'https://run.mocky.io/v3/8f75c4b5-ad90-49bb-bc52-f1fc0b4aad02' => Http::response([
+            $this->getBeneficiosUrl() => Http::response([
                 'code' => 200,
                 'success' => true,
                 'data' => [
@@ -331,7 +346,7 @@ class BeneficiosTest extends TestCase
                 ]
             ], 200),
             
-            'https://run.mocky.io/v3/b0ddc735-cfc9-410e-9365-137e04e33fcf' => Http::response([
+            $this->getFiltrosUrl() => Http::response([
                 'code' => 200,
                 'success' => true,
                 'data' => [
@@ -345,7 +360,7 @@ class BeneficiosTest extends TestCase
                 ]
             ], 200),
             
-            'https://run.mocky.io/v3/4654cafa-58d8-4846-9256-79841b29a687' => Http::response([
+            $this->getFichasUrl() => Http::response([
                 'code' => 200,
                 'success' => true,
                 'data' => []
@@ -365,19 +380,19 @@ class BeneficiosTest extends TestCase
     public function test_empty_beneficios_returns_empty_array()
     {
         Http::fake([
-            'https://run.mocky.io/v3/8f75c4b5-ad90-49bb-bc52-f1fc0b4aad02' => Http::response([
+            $this->getBeneficiosUrl() => Http::response([
                 'code' => 200,
                 'success' => true,
                 'data' => []
             ], 200),
             
-            'https://run.mocky.io/v3/b0ddc735-cfc9-410e-9365-137e04e33fcf' => Http::response([
+            $this->getFiltrosUrl() => Http::response([
                 'code' => 200,
                 'success' => true,
                 'data' => []
             ], 200),
             
-            'https://run.mocky.io/v3/4654cafa-58d8-4846-9256-79841b29a687' => Http::response([
+            $this->getFichasUrl() => Http::response([
                 'code' => 200,
                 'success' => true,
                 'data' => []
@@ -397,7 +412,7 @@ class BeneficiosTest extends TestCase
     public function test_beneficios_orders_within_year_by_date_desc()
     {
         Http::fake([
-            'https://run.mocky.io/v3/8f75c4b5-ad90-49bb-bc52-f1fc0b4aad02' => Http::response([
+            $this->getBeneficiosUrl() => Http::response([
                 'code' => 200,
                 'success' => true,
                 'data' => [
@@ -422,7 +437,7 @@ class BeneficiosTest extends TestCase
                 ]
             ], 200),
             
-            'https://run.mocky.io/v3/b0ddc735-cfc9-410e-9365-137e04e33fcf' => Http::response([
+            $this->getFiltrosUrl() => Http::response([
                 'code' => 200,
                 'success' => true,
                 'data' => [
@@ -436,7 +451,7 @@ class BeneficiosTest extends TestCase
                 ]
             ], 200),
             
-            'https://run.mocky.io/v3/4654cafa-58d8-4846-9256-79841b29a687' => Http::response([
+            $this->getFichasUrl() => Http::response([
                 'code' => 200,
                 'success' => true,
                 'data' => [
@@ -468,7 +483,7 @@ class BeneficiosTest extends TestCase
     public function test_beneficios_endpoint_returns_raw_data()
     {
         Http::fake([
-            'https://run.mocky.io/v3/8f75c4b5-ad90-49bb-bc52-f1fc0b4aad02' => Http::response([
+            $this->getBeneficiosUrl() => Http::response([
                 'code' => 200,
                 'success' => true,
                 'data' => [
@@ -502,7 +517,7 @@ class BeneficiosTest extends TestCase
     public function test_filtros_endpoint_returns_raw_data()
     {
         Http::fake([
-            'https://run.mocky.io/v3/b0ddc735-cfc9-410e-9365-137e04e33fcf' => Http::response([
+            $this->getFiltrosUrl() => Http::response([
                 'code' => 200,
                 'success' => true,
                 'data' => [
@@ -538,7 +553,7 @@ class BeneficiosTest extends TestCase
     public function test_fichas_endpoint_returns_raw_data()
     {
         Http::fake([
-            'https://run.mocky.io/v3/4654cafa-58d8-4846-9256-79841b29a687' => Http::response([
+            $this->getFichasUrl() => Http::response([
                 'code' => 200,
                 'success' => true,
                 'data' => [
@@ -576,9 +591,9 @@ class BeneficiosTest extends TestCase
     public function test_multiple_api_failures_returns_error()
     {
         Http::fake([
-            'https://run.mocky.io/v3/8f75c4b5-ad90-49bb-bc52-f1fc0b4aad02' => Http::response([], 500),
-            'https://run.mocky.io/v3/b0ddc735-cfc9-410e-9365-137e04e33fcf' => Http::response([], 500),
-            'https://run.mocky.io/v3/4654cafa-58d8-4846-9256-79841b29a687' => Http::response([], 500)
+            $this->getBeneficiosUrl() => Http::response([], 500),
+            $this->getFiltrosUrl() => Http::response([], 500),
+            $this->getFichasUrl() => Http::response([], 500)
         ]);
 
         $response = $this->getJson('/api/v1/beneficios-procesados');

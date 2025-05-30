@@ -12,9 +12,16 @@ use Illuminate\Support\Facades\Http;
  */
 class BeneficiosController extends Controller
 {
-    private $beneficiosUrl = 'https://run.mocky.io/v3/8f75c4b5-ad90-49bb-bc52-f1fc0b4aad02';
-    private $filtrosUrl = 'https://run.mocky.io/v3/b0ddc735-cfc9-410e-9365-137e04e33fcf';
-    private $fichasUrl = 'https://run.mocky.io/v3/4654cafa-58d8-4846-9256-79841b29a687';
+    private $beneficiosUrl;
+    private $filtrosUrl;
+    private $fichasUrl;
+
+    public function __construct()
+    {
+        $this->beneficiosUrl = env('BENEFICIOS_API_URL', 'https://run.mocky.io/v3/8f75c4b5-ad90-49bb-bc52-f1fc0b4aad02');
+        $this->filtrosUrl = env('FILTROS_API_URL', 'https://run.mocky.io/v3/b0ddc735-cfc9-410e-9365-137e04e33fcf');
+        $this->fichasUrl = env('FICHAS_API_URL', 'https://run.mocky.io/v3/4654cafa-58d8-4846-9256-79841b29a687');
+    }
 
     /**
      * @OA\Get(
