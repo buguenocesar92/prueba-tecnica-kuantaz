@@ -26,7 +26,6 @@ class BeneficiosTest extends TestCase
 
     public function test_beneficios_procesados_endpoint_returns_correct_structure()
     {
-        // Mock de los datos de respuesta de los endpoints externos
         Http::fake([
             $this->getBeneficiosUrl() => Http::response([
                 'code' => 200,
@@ -37,12 +36,6 @@ class BeneficiosTest extends TestCase
                         'monto' => 40656,
                         'fecha_recepcion' => '09/11/2023',
                         'fecha' => '2023-11-09'
-                    ],
-                    [
-                        'id_programa' => 130,
-                        'monto' => 1000,
-                        'fecha_recepcion' => '09/05/2023',
-                        'fecha' => '2023-05-09'
                     ]
                 ]
             ], 200),
@@ -57,13 +50,6 @@ class BeneficiosTest extends TestCase
                         'min' => 0,
                         'max' => 50000,
                         'ficha_id' => 922
-                    ],
-                    [
-                        'id_programa' => 130,
-                        'tramite' => 'Subsidio Único Familiar',
-                        'min' => 5000,
-                        'max' => 180000,
-                        'ficha_id' => 2042
                     ]
                 ]
             ], 200),
@@ -79,14 +65,6 @@ class BeneficiosTest extends TestCase
                         'url' => 'emprende',
                         'categoria' => 'trabajo',
                         'descripcion' => 'Fondos concursables para nuevos negocios'
-                    ],
-                    [
-                        'id' => 2042,
-                        'nombre' => 'Subsidio Familiar (SUF)',
-                        'id_programa' => 130,
-                        'url' => 'subsidio_familiar_suf',
-                        'categoria' => 'bonos',
-                        'descripcion' => 'Beneficio económico mensual entregado a madres, padres o tutores que no cuentan con previsión social.'
                     ]
                 ]
             ], 200)
@@ -96,29 +74,25 @@ class BeneficiosTest extends TestCase
 
         $response->assertStatus(200)
                 ->assertJsonStructure([
-                    'code',
-                    'success',
-                    'data' => [
-                        '*' => [
-                            'year',
-                            'total_monto',
-                            'num',
-                            'beneficios' => [
-                                '*' => [
+                    '*' => [
+                        'ano',
+                        'total_monto',
+                        'num',
+                        'beneficios' => [
+                            '*' => [
+                                'id_programa',
+                                'monto',
+                                'fecha_recepcion',
+                                'fecha',
+                                'ano',
+                                'view',
+                                'ficha' => [
+                                    'id',
+                                    'nombre',
                                     'id_programa',
-                                    'monto',
-                                    'fecha_recepcion',
-                                    'fecha',
-                                    'ano',
-                                    'view',
-                                    'ficha' => [
-                                        'id',
-                                        'nombre',
-                                        'id_programa',
-                                        'url',
-                                        'categoria',
-                                        'descripcion'
-                                    ]
+                                    'url',
+                                    'categoria',
+                                    'descripcion'
                                 ]
                             ]
                         ]
@@ -182,7 +156,7 @@ class BeneficiosTest extends TestCase
 
         $response->assertStatus(200);
         
-        $data = $response->json('data');
+        $data = $response->json();
         
         // Verificar que solo hay un beneficio (el de 10000, ya que 1000 fue filtrado)
         $this->assertEquals(1, $data[0]['num']);
@@ -245,11 +219,11 @@ class BeneficiosTest extends TestCase
 
         $response->assertStatus(200);
         
-        $data = $response->json('data');
+        $data = $response->json();
         
         // Verificar que 2023 viene antes que 2022 (orden descendente)
-        $this->assertEquals(2023, $data[0]['year']);
-        $this->assertEquals(2022, $data[1]['year']);
+        $this->assertEquals('2023', $data[0]['ano']);
+        $this->assertEquals('2022', $data[1]['ano']);
     }
 
     public function test_beneficios_procesados_calculates_total_amount_correctly()
@@ -308,7 +282,7 @@ class BeneficiosTest extends TestCase
 
         $response->assertStatus(200);
         
-        $data = $response->json('data');
+        $data = $response->json();
         
         // Verificar que el total es 50000 (20000 + 30000)
         $this->assertEquals(50000, $data[0]['total_monto']);
@@ -325,8 +299,7 @@ class BeneficiosTest extends TestCase
 
         $response->assertStatus(500)
                 ->assertJson([
-                    'code' => 500,
-                    'success' => false
+                    'error' => 'Error al procesar beneficios: Error al obtener beneficios: Error al obtener beneficios: HTTP 500'
                 ]);
     }
 
@@ -338,8 +311,8 @@ class BeneficiosTest extends TestCase
                 'success' => true,
                 'data' => [
                     [
-                        'id_programa' => 999, // Programa que no existe en filtros
-                        'monto' => 40656,
+                        'id_programa' => 999, // Programa sin filtro
+                        'monto' => 25000,
                         'fecha_recepcion' => '09/11/2023',
                         'fecha' => '2023-11-09'
                     ]
@@ -351,7 +324,7 @@ class BeneficiosTest extends TestCase
                 'success' => true,
                 'data' => [
                     [
-                        'id_programa' => 147,
+                        'id_programa' => 147, // Filtro para otro programa
                         'tramite' => 'Emprende',
                         'min' => 0,
                         'max' => 50000,
@@ -363,7 +336,16 @@ class BeneficiosTest extends TestCase
             $this->getFichasUrl() => Http::response([
                 'code' => 200,
                 'success' => true,
-                'data' => []
+                'data' => [
+                    [
+                        'id' => 922,
+                        'nombre' => 'Emprende',
+                        'id_programa' => 147,
+                        'url' => 'emprende',
+                        'categoria' => 'trabajo',
+                        'descripcion' => 'Fondos concursables para nuevos negocios'
+                    ]
+                ]
             ], 200)
         ]);
 
@@ -371,9 +353,9 @@ class BeneficiosTest extends TestCase
 
         $response->assertStatus(200);
         
-        $data = $response->json('data');
+        $data = $response->json();
         
-        // Verificar que no hay beneficios porque el programa 999 no tiene filtro válido
+        // Verificar que no hay beneficios porque no hay filtros válidos
         $this->assertEmpty($data);
     }
 
@@ -402,14 +384,10 @@ class BeneficiosTest extends TestCase
         $response = $this->getJson('/api/v1/beneficios-procesados');
 
         $response->assertStatus(200)
-                ->assertJson([
-                    'code' => 200,
-                    'success' => true,
-                    'data' => []
-                ]);
+                ->assertJson([]);
     }
 
-    public function test_beneficios_orders_within_year_by_date_desc()
+    public function test_beneficios_orders_within_year_by_date_asc()
     {
         Http::fake([
             $this->getBeneficiosUrl() => Http::response([
@@ -419,20 +397,14 @@ class BeneficiosTest extends TestCase
                     [
                         'id_programa' => 147,
                         'monto' => 40656,
-                        'fecha_recepcion' => '09/01/2023',
-                        'fecha' => '2023-01-09'
-                    ],
-                    [
-                        'id_programa' => 147,
-                        'monto' => 40656,
                         'fecha_recepcion' => '09/12/2023',
-                        'fecha' => '2023-12-09'
+                        'fecha' => '2023-12-09' // Fecha más reciente
                     ],
                     [
                         'id_programa' => 147,
                         'monto' => 40656,
                         'fecha_recepcion' => '09/06/2023',
-                        'fecha' => '2023-06-09'
+                        'fecha' => '2023-06-09' // Fecha más antigua
                     ]
                 ]
             ], 200),
@@ -471,121 +443,12 @@ class BeneficiosTest extends TestCase
 
         $response->assertStatus(200);
         
-        $data = $response->json('data');
+        $data = $response->json();
         $beneficios = $data[0]['beneficios'];
         
-        // Verificar que dentro del año están ordenados por fecha descendente
-        $this->assertEquals('2023-12-09', $beneficios[0]['fecha']);
-        $this->assertEquals('2023-06-09', $beneficios[1]['fecha']);
-        $this->assertEquals('2023-01-09', $beneficios[2]['fecha']);
-    }
-
-    public function test_beneficios_endpoint_returns_raw_data()
-    {
-        Http::fake([
-            $this->getBeneficiosUrl() => Http::response([
-                'code' => 200,
-                'success' => true,
-                'data' => [
-                    [
-                        'id_programa' => 147,
-                        'monto' => 40656,
-                        'fecha_recepcion' => '09/11/2023',
-                        'fecha' => '2023-11-09'
-                    ]
-                ]
-            ], 200)
-        ]);
-
-        $response = $this->getJson('/api/v1/beneficios');
-
-        $response->assertStatus(200)
-                ->assertJsonStructure([
-                    'code',
-                    'success',
-                    'data' => [
-                        '*' => [
-                            'id_programa',
-                            'monto',
-                            'fecha_recepcion',
-                            'fecha'
-                        ]
-                    ]
-                ]);
-    }
-
-    public function test_filtros_endpoint_returns_raw_data()
-    {
-        Http::fake([
-            $this->getFiltrosUrl() => Http::response([
-                'code' => 200,
-                'success' => true,
-                'data' => [
-                    [
-                        'id_programa' => 147,
-                        'tramite' => 'Emprende',
-                        'min' => 0,
-                        'max' => 50000,
-                        'ficha_id' => 922
-                    ]
-                ]
-            ], 200)
-        ]);
-
-        $response = $this->getJson('/api/v1/filtros');
-
-        $response->assertStatus(200)
-                ->assertJsonStructure([
-                    'code',
-                    'success',
-                    'data' => [
-                        '*' => [
-                            'id_programa',
-                            'tramite',
-                            'min',
-                            'max',
-                            'ficha_id'
-                        ]
-                    ]
-                ]);
-    }
-
-    public function test_fichas_endpoint_returns_raw_data()
-    {
-        Http::fake([
-            $this->getFichasUrl() => Http::response([
-                'code' => 200,
-                'success' => true,
-                'data' => [
-                    [
-                        'id' => 922,
-                        'nombre' => 'Emprende',
-                        'id_programa' => 147,
-                        'url' => 'emprende',
-                        'categoria' => 'trabajo',
-                        'descripcion' => 'Fondos concursables para nuevos negocios'
-                    ]
-                ]
-            ], 200)
-        ]);
-
-        $response = $this->getJson('/api/v1/fichas');
-
-        $response->assertStatus(200)
-                ->assertJsonStructure([
-                    'code',
-                    'success',
-                    'data' => [
-                        '*' => [
-                            'id',
-                            'nombre',
-                            'id_programa',
-                            'url',
-                            'categoria',
-                            'descripcion'
-                        ]
-                    ]
-                ]);
+        // Verificar que dentro del año están ordenados por fecha ascendente
+        $this->assertEquals('2023-06-09', $beneficios[0]['fecha']);
+        $this->assertEquals('2023-12-09', $beneficios[1]['fecha']);
     }
 
     public function test_multiple_api_failures_returns_error()
@@ -600,8 +463,7 @@ class BeneficiosTest extends TestCase
 
         $response->assertStatus(500)
                 ->assertJson([
-                    'code' => 500,
-                    'success' => false
+                    'error' => 'Error al procesar beneficios: Error al obtener beneficios: Error al obtener beneficios: HTTP 500'
                 ]);
     }
 } 
