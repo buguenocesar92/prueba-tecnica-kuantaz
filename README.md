@@ -30,18 +30,18 @@ API REST desarrollada en Laravel para el procesamiento y gestión de beneficios 
 - **Filtrado Inteligente**: Aplica filtros por montos mínimos y máximos según programa
 - **Agrupación por Año**: Organiza beneficios por año en orden descendente
 - **Información Completa**: Incluye fichas detalladas de cada beneficio
-- **API RESTful**: Endpoints bien estructurados con respuestas JSON
-- **Testing Completo**: 12 tests unitarios con 74 aserciones (100% cobertura)
+- **API RESTful**: Endpoint bien estructurado con respuestas JSON
+- **Testing Completo**: 16 tests unitarios y de integración con 56 aserciones (88% cobertura)
 - **Documentación Swagger**: API documentada con OpenAPI
 - **Variables de Entorno**: Configuración flexible y segura
 - **Laravel Collections**: Uso extensivo para procesamiento eficiente
 
 ## 🔧 Requisitos
 
-- **PHP**: >= 8.1
+- **PHP**: >= 8.2
 - **Composer**: >= 2.0
-- **Laravel**: 11.x
-- **Base de Datos**: MariaDB/MySQL (opcional para este proyecto)
+- **Laravel**: 12.x
+- **Base de Datos**: No requerida (API consume datos externos)
 - **Extensiones PHP**: 
   - OpenSSL
   - PDO
@@ -57,7 +57,7 @@ API REST desarrollada en Laravel para el procesamiento y gestión de beneficios 
 ### 1. Clonar el Repositorio
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/buguenocesar92/prueba-tecnica-kuantaz.git
 cd prueba-tecnica-kuantaz
 ```
 
@@ -79,26 +79,7 @@ cp .env.example .env
 php artisan key:generate
 ```
 
-### 5. Configurar Base de Datos (Opcional)
-
-Editar `.env` con tus credenciales de base de datos:
-
-```env
-DB_CONNECTION=mariadb
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=prueba_tecnica_kuantaz
-DB_USERNAME=buguenocesar92
-DB_PASSWORD=tu_password
-```
-
-### 6. Ejecutar Migraciones (Si usas BD)
-
-```bash
-php artisan migrate
-```
-
-### 7. Iniciar Servidor de Desarrollo
+### 5. Iniciar Servidor de Desarrollo
 
 ```bash
 php artisan serve
@@ -127,7 +108,7 @@ Los requests HTTP tienen un timeout de 30 segundos configurado por defecto.
 
 ### Endpoint Principal
 
-El endpoint principal procesa y devuelve los beneficios agrupados por año:
+El proyecto tiene un único endpoint que procesa y devuelve los beneficios agrupados por año:
 
 ```bash
 curl -X GET http://127.0.0.1:8000/api/v1/beneficios-procesados
@@ -136,56 +117,44 @@ curl -X GET http://127.0.0.1:8000/api/v1/beneficios-procesados
 ### Respuesta Ejemplo
 
 ```json
-{
-  "code": 200,
-  "success": true,
-  "data": [
-    {
-      "year": 2023,
-      "total_monto": 250000,
-      "num": 8,
-      "beneficios": [
-        {
+[
+  {
+    "ano": "2023",
+    "total_monto": 295608,
+    "num": 8,
+    "beneficios": [
+      {
+        "id_programa": 147,
+        "monto": 40656,
+        "fecha_recepcion": "09/11/2023",
+        "fecha": "2023-11-09",
+        "ano": "2023",
+        "view": true,
+        "ficha": {
+          "id": 922,
+          "nombre": "Emprende",
           "id_programa": 147,
-          "monto": 40656,
-          "fecha_recepcion": "09/11/2023",
-          "fecha": "2023-11-09",
-          "ano": "2023",
-          "view": true,
-          "ficha": {
-            "id": 922,
-            "nombre": "Emprende",
-            "id_programa": 147,
-            "url": "emprende",
-            "categoria": "trabajo",
-            "descripcion": "Fondos concursables para nuevos negocios"
-          }
+          "url": "emprende",
+          "categoria": "trabajo",
+          "descripcion": "Fondos concursables para nuevos negocios"
         }
-      ]
-    }
-  ]
-}
+      }
+    ]
+  }
+]
 ```
 
 ## 🛠 Endpoints
 
-### Endpoints Principales
+### Endpoint Principal
 
 | Método | Endpoint | Descripción |
 |--------|----------|-------------|
 | `GET` | `/api/v1/beneficios-procesados` | Obtiene beneficios procesados y agrupados por año |
 
-### Endpoints Auxiliares (Para Testing)
-
-| Método | Endpoint | Descripción |
-|--------|----------|-------------|
-| `GET` | `/api/v1/beneficios` | Datos raw del endpoint de beneficios |
-| `GET` | `/api/v1/filtros` | Datos raw del endpoint de filtros |
-| `GET` | `/api/v1/fichas` | Datos raw del endpoint de fichas |
-
 ### Códigos de Respuesta
 
-- `200`: Éxito
+- `200`: Éxito - Retorna array de beneficios agrupados por año
 - `500`: Error interno del servidor o fallo en APIs externas
 
 ## 🧪 Testing
@@ -196,45 +165,42 @@ curl -X GET http://127.0.0.1:8000/api/v1/beneficios-procesados
 php artisan test
 ```
 
-### Ejecutar Tests Específicos
+### Ejecutar Tests con Cobertura
 
 ```bash
-# Solo tests de beneficios
-php artisan test tests/Feature/BeneficiosTest.php
-
-# Test específico
-php artisan test --filter="test_beneficios_procesados_endpoint_returns_correct_structure"
-
-# Con cobertura
-php artisan test --coverage
+composer test-coverage
 ```
 
 ### Tests Incluidos
 
-#### Tests Principales (5)
+#### Tests de Servicio (5 tests)
+- ✅ Procesamiento de beneficios con datos válidos
+- ✅ Filtrado por montos mínimos y máximos
+- ✅ Exclusión de beneficios sin filtros válidos
+- ✅ Exclusión de beneficios sin fichas
+- ✅ Ordenamiento por año descendente
+
+#### Tests de Endpoint (9 tests)
 - ✅ Estructura correcta del JSON de respuesta
 - ✅ Filtrado por montos mínimos y máximos
 - ✅ Ordenamiento por año descendente
 - ✅ Cálculo correcto de totales por año
 - ✅ Manejo de errores de APIs externas
-
-#### Tests de Casos Edge (4)
 - ✅ Exclusión de beneficios sin filtros válidos
 - ✅ Manejo de arrays vacíos
-- ✅ Ordenamiento interno por fecha descendente
+- ✅ Ordenamiento interno por fecha ascendente
 - ✅ Múltiples fallos de APIs externas
 
-#### Tests de Endpoints Auxiliares (3)
-- ✅ Endpoint `/api/v1/beneficios`
-- ✅ Endpoint `/api/v1/filtros`
-- ✅ Endpoint `/api/v1/fichas`
+#### Tests Básicos (2 tests)
+- ✅ Test unitario básico
+- ✅ Test de aplicación básico
 
 ### Estadísticas de Testing
 
-- **Total Tests**: 12
-- **Total Aserciones**: 74
-- **Cobertura**: 100%
-- **Tiempo Promedio**: ~1.5 segundos
+- **Total Tests**: 16
+- **Total Aserciones**: 56
+- **Cobertura**: 88%
+- **Tiempo Promedio**: ~0.5 segundos
 
 ## 🔧 Herramientas de Calidad de Código
 
@@ -243,32 +209,36 @@ php artisan test --coverage
 ```bash
 # Testing
 composer test              # Ejecutar tests
-composer test-coverage     # Tests con cobertura HTML
+composer test-coverage     # Tests con cobertura HTML y texto
 
 # Análisis de Código
-composer analyse           # Análisis estático con PHPStan (nivel 8)
-composer fix              # Corregir estilo con PHP CS Fixer
+composer analyse           # Análisis estático con PHPStan (nivel 5)
+composer fix              # Corregir estilo con Laravel Pint
 composer refactor         # Modernizar código con Rector
 
 # Scripts Combinados
 composer quality          # analyse + fix + test
 composer ci               # analyse + test-coverage (para CI/CD)
+
+# Badge de Cobertura
+composer update-coverage-badge  # Actualizar badge en README
+composer coverage-badge         # test-coverage + update-coverage-badge
 ```
 
 ### Herramientas Configuradas
 
 #### **PHPStan (Análisis Estático)**
-- **Nivel**: 8 (máximo)
+- **Nivel**: 5
 - **Configuración**: `phpstan.neon`
 - **Beneficios**: Detección de errores antes de runtime, verificación de tipos
 
-#### **PHP CS Fixer (Estilo de Código)**
-- **Estándar**: PSR-12 + PHP 8.1
-- **Configuración**: `.php-cs-fixer.php`
+#### **Laravel Pint (Estilo de Código)**
+- **Estándar**: PSR-12 + Laravel
+- **Configuración**: `pint.json`
 - **Beneficios**: Código consistente, imports ordenados, formato automático
 
 #### **Rector (Modernización)**
-- **Target**: PHP 8.1
+- **Target**: PHP 8.2
 - **Configuración**: `rector.php`
 - **Beneficios**: Actualización automática, mejoras de calidad, eliminación de código muerto
 
@@ -283,6 +253,9 @@ composer quality
 
 # Para CI/CD
 composer ci
+
+# Actualizar badge de cobertura
+composer coverage-badge
 ```
 
 ## 🔧 Documentación API
@@ -301,30 +274,16 @@ php artisan l5-swagger:generate
 Una vez que el servidor esté corriendo:
 
 - **Interfaz Swagger**: `http://127.0.0.1:8000/api/documentation`
-- **Redirección desde raíz**: `http://127.0.0.1:8000/`
-- **Ruta alternativa**: `http://127.0.0.1:8000/docs`
 - **JSON API Docs**: `http://127.0.0.1:8000/docs/api-docs.json`
 
 #### Características de la Documentación
 
-- ✅ **Interfaz interactiva** para probar endpoints
+- ✅ **Interfaz interactiva** para probar el endpoint
 - ✅ **Ejemplos de respuesta** con datos reales
 - ✅ **Esquemas detallados** de request/response
 - ✅ **Descripciones completas** de cada campo
 - ✅ **Códigos de error** y manejo de excepciones
 - ✅ **Información del proyecto** y contacto
-
-#### Comandos Útiles
-```bash
-# Regenerar documentación después de cambios
-php artisan l5-swagger:generate
-
-# Limpiar cache de documentación
-php artisan l5-swagger:generate --force
-
-# Ver configuración de Swagger
-php artisan config:show l5-swagger
-```
 
 ## 📮 Colección de Postman
 
@@ -332,7 +291,7 @@ El proyecto incluye una **colección completa de Postman** para facilitar las pr
 
 ### Archivos Incluidos
 
-- **`Kuantaz_API_Collection.postman_collection.json`**: Colección principal con todos los endpoints
+- **`Kuantaz_API_Collection.postman_collection.json`**: Colección principal con el endpoint
 - **`Kuantaz_API_Environment.postman_environment.json`**: Variables de entorno para desarrollo local
 - **`POSTMAN_GUIDE.md`**: Guía completa de uso
 
@@ -353,16 +312,8 @@ El proyecto incluye una **colección completa de Postman** para facilitar las pr
 
 ### Estructura de la Colección
 
-#### 🎯 **Endpoints Principales**
+#### 🎯 **Endpoint Principal**
 - **Beneficios Procesados**: Endpoint principal con tests automatizados
-
-#### 📚 **Documentación**
-- **Swagger UI**: Acceso a documentación interactiva
-- **API Docs JSON**: Especificación OpenAPI
-
-#### 🏠 **Navegación**
-- **Página Principal**: Redirección automática
-- **Documentación Alternativa**: Ruta alternativa
 
 #### 🧪 **Tests de Validación**
 - **Test de Conectividad**: Verificación básica del servidor
@@ -370,9 +321,9 @@ El proyecto incluye una **colección completa de Postman** para facilitar las pr
 
 ### Tests Automatizados
 
-Cada endpoint incluye **tests automatizados** que verifican:
+La colección incluye **tests automatizados** que verifican:
 
-- ✅ **Status codes** correctos (200, 302, etc.)
+- ✅ **Status codes** correctos (200, 500)
 - ✅ **Estructura JSON** apropiada
 - ✅ **Tipos de datos** correctos
 - ✅ **Lógica de negocio** (ordenamiento, cálculos)
@@ -412,33 +363,47 @@ Para más detalles, consulta **`POSTMAN_GUIDE.md`**.
 ```
 prueba-tecnica-kuantaz/
 ├── app/
-│   └── Http/
-│       └── Controllers/
-│           └── BeneficiosController.php    # Controlador principal
+│   ├── Http/
+│   │   └── Controllers/
+│   │       └── BeneficiosController.php    # Controlador principal
+│   └── Services/
+│       └── BeneficiosService.php           # Lógica de negocio
 ├── routes/
-│   └── api.php                             # Rutas de la API
+│   ├── api.php                             # Rutas de la API
+│   └── web.php                             # Rutas web básicas
 ├── tests/
-│   └── Feature/
-│       └── BeneficiosTest.php              # Tests completos
+│   ├── Feature/
+│   │   └── BeneficiosTest.php              # Tests de endpoint
+│   └── Unit/
+│       └── Services/
+│           └── BeneficiosServiceTest.php   # Tests de servicio
+├── .github/
+│   └── workflows/
+│       └── ci.yml                          # GitHub Actions CI/CD
+├── scripts/
+│   └── update-coverage-badge.php           # Script para actualizar badge
 ├── .env                                    # Variables de entorno
 ├── .env.example                            # Ejemplo de configuración
 └── README.md                               # Este archivo
 ```
 
-### Controlador Principal
+### Componentes Principales
 
-El `BeneficiosController` implementa:
+#### **BeneficiosController**
+- Único controlador de la API
+- Documentación Swagger completa
+- Manejo de errores robusto
 
-- **Consumo de APIs**: 3 endpoints externos
-- **Procesamiento**: Filtrado y agrupación con Laravel Collections
-- **Manejo de Errores**: Timeouts y fallos de conexión
-- **Documentación**: Anotaciones Swagger completas
+#### **BeneficiosService**
+- Lógica de negocio separada
+- Consumo de APIs externas
+- Procesamiento con Laravel Collections
 
 ## 🔧 Tecnologías Utilizadas
 
 ### Backend
-- **Laravel 11.x**: Framework PHP
-- **PHP 8.1+**: Lenguaje de programación
+- **Laravel 12.x**: Framework PHP
+- **PHP 8.2+**: Lenguaje de programación
 - **Guzzle HTTP**: Cliente HTTP para APIs externas
 - **Laravel Collections**: Procesamiento eficiente de datos
 
@@ -455,6 +420,7 @@ El `BeneficiosController` implementa:
 - **Composer**: Gestión de dependencias
 - **Artisan**: CLI de Laravel
 - **Git**: Control de versiones
+- **GitHub Actions**: CI/CD
 
 ## 🚀 Características Técnicas
 
@@ -473,7 +439,7 @@ $beneficiosFiltrados = $beneficiosCollection
         // Agregar información adicional
     })
     ->groupBy('ano')
-    ->sortByDesc('year');
+    ->sortByDesc('ano');
 ```
 
 ### Manejo de Errores
@@ -494,7 +460,7 @@ $beneficiosFiltrados = $beneficiosCollection
 
 ### Requisitos de la Prueba Técnica
 
-1. ✅ **Beneficios ordenados por años**
+1. ✅ **Beneficios ordenados por años** (descendente)
 2. ✅ **Monto total por año**
 3. ✅ **Número de beneficios por año**
 4. ✅ **Filtrar por montos mín/máx**
@@ -526,6 +492,8 @@ Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más det
 
 ## 👨‍💻 Autor
 
+**César Bugueno**  
+Email: buguenocesar92@gmail.com  
 Desarrollado para la prueba técnica de **Kuantaz**.
 
 ---
@@ -535,3 +503,4 @@ Desarrollado para la prueba técnica de **Kuantaz**.
 - Revisa la [documentación de Laravel](https://laravel.com/docs)
 - Ejecuta `php artisan test` para verificar que todo funciona
 - Consulta los logs en `storage/logs/laravel.log`
+- Visita la documentación Swagger en `http://127.0.0.1:8000/api/documentation`
