@@ -228,7 +228,56 @@ php artisan test --coverage
 - **Cobertura**: 100%
 - **Tiempo Promedio**: ~1.5 segundos
 
-## 📚 Documentación API
+## 🔧 Herramientas de Calidad de Código
+
+### Scripts Disponibles
+
+```bash
+# Testing
+composer test              # Ejecutar tests
+composer test-coverage     # Tests con cobertura HTML
+
+# Análisis de Código
+composer analyse           # Análisis estático con PHPStan (nivel 8)
+composer fix              # Corregir estilo con PHP CS Fixer
+composer refactor         # Modernizar código con Rector
+
+# Scripts Combinados
+composer quality          # analyse + fix + test
+composer ci               # analyse + test-coverage (para CI/CD)
+```
+
+### Herramientas Configuradas
+
+#### **PHPStan (Análisis Estático)**
+- **Nivel**: 8 (máximo)
+- **Configuración**: `phpstan.neon`
+- **Beneficios**: Detección de errores antes de runtime, verificación de tipos
+
+#### **PHP CS Fixer (Estilo de Código)**
+- **Estándar**: PSR-12 + PHP 8.1
+- **Configuración**: `.php-cs-fixer.php`
+- **Beneficios**: Código consistente, imports ordenados, formato automático
+
+#### **Rector (Modernización)**
+- **Target**: PHP 8.1
+- **Configuración**: `rector.php`
+- **Beneficios**: Actualización automática, mejoras de calidad, eliminación de código muerto
+
+### Flujo de Trabajo Recomendado
+
+```bash
+# Durante desarrollo
+composer fix && composer analyse && composer test
+
+# Antes de commit
+composer quality
+
+# Para CI/CD
+composer ci
+```
+
+## �� Documentación API
 
 ### Swagger/OpenAPI
 
