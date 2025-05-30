@@ -1,10 +1,10 @@
 # 🚀 Prueba Técnica Kuantaz - API de Beneficios
 
-[![CI](https://github.com/TU_USUARIO/prueba-tecnica-kuantaz/workflows/CI/badge.svg)](https://github.com/TU_USUARIO/prueba-tecnica-kuantaz/actions)
-[![Coverage](https://img.shields.io/badge/coverage-88%25-brightgreen)](https://github.com/TU_USUARIO/prueba-tecnica-kuantaz)
+[![CI](https://github.com/buguenocesar92/prueba-tecnica-kuantaz/workflows/CI/badge.svg)](https://github.com/buguenocesar92/prueba-tecnica-kuantaz/actions)
+[![Coverage](https://img.shields.io/badge/coverage-88%25-brightgreen)](https://github.com/buguenocesar92/prueba-tecnica-kuantaz)
 [![PHPStan](https://img.shields.io/badge/PHPStan-level%205-brightgreen)](https://phpstan.org/)
 [![Laravel Pint](https://img.shields.io/badge/Laravel%20Pint-passing-brightgreen)](https://laravel.com/docs/pint)
-[![Tests](https://img.shields.io/badge/tests-16%20passing-brightgreen)](https://github.com/TU_USUARIO/prueba-tecnica-kuantaz)
+[![Tests](https://img.shields.io/badge/tests-16%20passing-brightgreen)](https://github.com/buguenocesar92/prueba-tecnica-kuantaz)
 [![PHP Version](https://img.shields.io/badge/php-%5E8.2-blue)](https://php.net)
 [![Laravel](https://img.shields.io/badge/laravel-12.x-red)](https://laravel.com)
 
@@ -88,7 +88,7 @@ DB_CONNECTION=mariadb
 DB_HOST=127.0.0.1
 DB_PORT=3306
 DB_DATABASE=prueba_tecnica_kuantaz
-DB_USERNAME=tu_usuario
+DB_USERNAME=buguenocesar92
 DB_PASSWORD=tu_password
 ```
 

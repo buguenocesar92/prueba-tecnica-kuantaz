@@ -15,11 +15,11 @@ Tu proyecto ahora tiene un sistema completo de badges que muestran el estado de 
 ## 🎯 Badges Actuales en README.md
 
 ```markdown
-[![CI](https://github.com/TU_USUARIO/prueba-tecnica-kuantaz/workflows/CI/badge.svg)](https://github.com/TU_USUARIO/prueba-tecnica-kuantaz/actions)
-[![Coverage](https://img.shields.io/badge/coverage-88%25-brightgreen)](https://github.com/TU_USUARIO/prueba-tecnica-kuantaz)
+[![CI](https://github.com/buguenocesar92/prueba-tecnica-kuantaz/workflows/CI/badge.svg)](https://github.com/buguenocesar92/prueba-tecnica-kuantaz/actions)
+[![Coverage](https://img.shields.io/badge/coverage-88%25-brightgreen)](https://github.com/buguenocesar92/prueba-tecnica-kuantaz)
 [![PHPStan](https://img.shields.io/badge/PHPStan-level%205-brightgreen)](https://phpstan.org/)
 [![Laravel Pint](https://img.shields.io/badge/Laravel%20Pint-passing-brightgreen)](https://laravel.com/docs/pint)
-[![Tests](https://img.shields.io/badge/tests-16%20passing-brightgreen)](https://github.com/TU_USUARIO/prueba-tecnica-kuantaz)
+[![Tests](https://img.shields.io/badge/tests-16%20passing-brightgreen)](https://github.com/buguenocesar92/prueba-tecnica-kuantaz)
 [![PHP Version](https://img.shields.io/badge/php-%5E8.2-blue)](https://php.net)
 [![Laravel](https://img.shields.io/badge/laravel-12.x-red)](https://laravel.com)
 ```
@@ -83,7 +83,7 @@ El archivo `.github/workflows/ci.yml` ejecuta automáticamente:
 Una vez que subas el código a GitHub, el badge de CI se actualizará automáticamente:
 
 ```markdown
-[![CI](https://github.com/TU_USUARIO/prueba-tecnica-kuantaz/workflows/CI/badge.svg)](https://github.com/TU_USUARIO/prueba-tecnica-kuantaz/actions)
+[![CI](https://github.com/buguenocesar92/prueba-tecnica-kuantaz/workflows/CI/badge.svg)](https://github.com/buguenocesar92/prueba-tecnica-kuantaz/actions)
 ```
 
 **Estados posibles:**
@@ -123,10 +123,10 @@ brightgreen, green, yellowgreen, yellow, orange, red, lightgrey, blue
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 <!-- Badge de versión -->
-[![Version](https://img.shields.io/badge/version-1.0.0-green)](https://github.com/TU_USUARIO/prueba-tecnica-kuantaz/releases)
+[![Version](https://img.shields.io/badge/version-1.0.0-green)](https://github.com/buguenocesar92/prueba-tecnica-kuantaz/releases)
 
 <!-- Badge de issues -->
-[![Issues](https://img.shields.io/github/issues/TU_USUARIO/prueba-tecnica-kuantaz)](https://github.com/TU_USUARIO/prueba-tecnica-kuantaz/issues)
+[![Issues](https://img.shields.io/github/issues/buguenocesar92/prueba-tecnica-kuantaz)](https://github.com/buguenocesar92/prueba-tecnica-kuantaz/issues)
 ```
 
 ## 🎯 Flujo de Trabajo Recomendado
@@ -174,7 +174,7 @@ Cuando agregues nuevos tests:
 php artisan test --list | wc -l
 
 # 2. Actualizar manualmente en README.md
-[![Tests](https://img.shields.io/badge/tests-XX%20passing-brightgreen)](https://github.com/TU_USUARIO/prueba-tecnica-kuantaz)
+[![Tests](https://img.shields.io/badge/tests-XX%20passing-brightgreen)](https://github.com/buguenocesar92/prueba-tecnica-kuantaz)
 ```
 
 ### **Actualizar Badge de PHPStan**
@@ -202,7 +202,7 @@ Si quieres cobertura dinámica real:
 2. **Conectar** tu repositorio de GitHub
 3. **Usar badge dinámico**:
    ```markdown
-   [![codecov](https://codecov.io/gh/TU_USUARIO/prueba-tecnica-kuantaz/branch/main/graph/badge.svg)](https://codecov.io/gh/TU_USUARIO/prueba-tecnica-kuantaz)
+   [![codecov](https://codecov.io/gh/buguenocesar92/prueba-tecnica-kuantaz/branch/main/graph/badge.svg)](https://codecov.io/gh/buguenocesar92/prueba-tecnica-kuantaz)
    ```
 
 ### **Shields.io (Badges Personalizados)**
@@ -211,13 +211,13 @@ Para badges más avanzados:
 
 ```markdown
 <!-- Badge dinámico de GitHub -->
-[![GitHub issues](https://img.shields.io/github/issues/TU_USUARIO/prueba-tecnica-kuantaz)](https://github.com/TU_USUARIO/prueba-tecnica-kuantaz/issues)
+[![GitHub issues](https://img.shields.io/github/issues/buguenocesar92/prueba-tecnica-kuantaz)](https://github.com/buguenocesar92/prueba-tecnica-kuantaz/issues)
 
 <!-- Badge de último commit -->
-[![GitHub last commit](https://img.shields.io/github/last-commit/TU_USUARIO/prueba-tecnica-kuantaz)](https://github.com/TU_USUARIO/prueba-tecnica-kuantaz/commits/main)
+[![GitHub last commit](https://img.shields.io/github/last-commit/buguenocesar92/prueba-tecnica-kuantaz)](https://github.com/buguenocesar92/prueba-tecnica-kuantaz/commits/main)
 
 <!-- Badge de tamaño del repo -->
-[![GitHub repo size](https://img.shields.io/github/repo-size/TU_USUARIO/prueba-tecnica-kuantaz)](https://github.com/TU_USUARIO/prueba-tecnica-kuantaz)
+[![GitHub repo size](https://img.shields.io/github/repo-size/buguenocesar92/prueba-tecnica-kuantaz)](https://github.com/buguenocesar92/prueba-tecnica-kuantaz)
 ```
 
 ## 🎉 Resultado Final
@@ -232,7 +232,7 @@ Con este sistema tendrás un README profesional que muestra:
 
 ## 🚀 Próximos Pasos
 
-1. **Reemplazar** `TU_USUARIO` con tu usuario real de GitHub
+1. **Reemplazar** `buguenocesar92` con tu usuario real de GitHub
 2. **Subir** el código a GitHub para activar el CI badge
 3. **Configurar** Codecov si quieres cobertura dinámica
 4. **Personalizar** badges adicionales según tus necesidades
