@@ -65,7 +65,7 @@ class BeneficiosController extends Controller
             $filtros = $this->fetchFiltros();
             $fichas = $this->fetchFichas();
 
-            if (!$beneficios || !$filtros || !$fichas) {
+            if ($beneficios === null || $filtros === null || $fichas === null) {
                 return response()->json([
                     'code' => 500,
                     'success' => false,
@@ -73,7 +73,7 @@ class BeneficiosController extends Controller
                 ], 500);
             }
 
-            // Procesar los datos
+            // Procesar los datos (puede devolver array vacío si no hay datos válidos)
             $beneficiosProcesados = $this->procesarBeneficios($beneficios, $filtros, $fichas);
 
             return response()->json([

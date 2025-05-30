@@ -314,4 +314,279 @@ class BeneficiosTest extends TestCase
                     'success' => false
                 ]);
     }
+
+    public function test_beneficios_without_valid_filters_are_excluded()
+    {
+        Http::fake([
+            'https://run.mocky.io/v3/8f75c4b5-ad90-49bb-bc52-f1fc0b4aad02' => Http::response([
+                'code' => 200,
+                'success' => true,
+                'data' => [
+                    [
+                        'id_programa' => 999, // Programa que no existe en filtros
+                        'monto' => 40656,
+                        'fecha_recepcion' => '09/11/2023',
+                        'fecha' => '2023-11-09'
+                    ]
+                ]
+            ], 200),
+            
+            'https://run.mocky.io/v3/b0ddc735-cfc9-410e-9365-137e04e33fcf' => Http::response([
+                'code' => 200,
+                'success' => true,
+                'data' => [
+                    [
+                        'id_programa' => 147,
+                        'tramite' => 'Emprende',
+                        'min' => 0,
+                        'max' => 50000,
+                        'ficha_id' => 922
+                    ]
+                ]
+            ], 200),
+            
+            'https://run.mocky.io/v3/4654cafa-58d8-4846-9256-79841b29a687' => Http::response([
+                'code' => 200,
+                'success' => true,
+                'data' => []
+            ], 200)
+        ]);
+
+        $response = $this->getJson('/api/v1/beneficios-procesados');
+
+        $response->assertStatus(200);
+        
+        $data = $response->json('data');
+        
+        // Verificar que no hay beneficios porque el programa 999 no tiene filtro válido
+        $this->assertEmpty($data);
+    }
+
+    public function test_empty_beneficios_returns_empty_array()
+    {
+        Http::fake([
+            'https://run.mocky.io/v3/8f75c4b5-ad90-49bb-bc52-f1fc0b4aad02' => Http::response([
+                'code' => 200,
+                'success' => true,
+                'data' => []
+            ], 200),
+            
+            'https://run.mocky.io/v3/b0ddc735-cfc9-410e-9365-137e04e33fcf' => Http::response([
+                'code' => 200,
+                'success' => true,
+                'data' => []
+            ], 200),
+            
+            'https://run.mocky.io/v3/4654cafa-58d8-4846-9256-79841b29a687' => Http::response([
+                'code' => 200,
+                'success' => true,
+                'data' => []
+            ], 200)
+        ]);
+
+        $response = $this->getJson('/api/v1/beneficios-procesados');
+
+        $response->assertStatus(200)
+                ->assertJson([
+                    'code' => 200,
+                    'success' => true,
+                    'data' => []
+                ]);
+    }
+
+    public function test_beneficios_orders_within_year_by_date_desc()
+    {
+        Http::fake([
+            'https://run.mocky.io/v3/8f75c4b5-ad90-49bb-bc52-f1fc0b4aad02' => Http::response([
+                'code' => 200,
+                'success' => true,
+                'data' => [
+                    [
+                        'id_programa' => 147,
+                        'monto' => 40656,
+                        'fecha_recepcion' => '09/01/2023',
+                        'fecha' => '2023-01-09'
+                    ],
+                    [
+                        'id_programa' => 147,
+                        'monto' => 40656,
+                        'fecha_recepcion' => '09/12/2023',
+                        'fecha' => '2023-12-09'
+                    ],
+                    [
+                        'id_programa' => 147,
+                        'monto' => 40656,
+                        'fecha_recepcion' => '09/06/2023',
+                        'fecha' => '2023-06-09'
+                    ]
+                ]
+            ], 200),
+            
+            'https://run.mocky.io/v3/b0ddc735-cfc9-410e-9365-137e04e33fcf' => Http::response([
+                'code' => 200,
+                'success' => true,
+                'data' => [
+                    [
+                        'id_programa' => 147,
+                        'tramite' => 'Emprende',
+                        'min' => 0,
+                        'max' => 50000,
+                        'ficha_id' => 922
+                    ]
+                ]
+            ], 200),
+            
+            'https://run.mocky.io/v3/4654cafa-58d8-4846-9256-79841b29a687' => Http::response([
+                'code' => 200,
+                'success' => true,
+                'data' => [
+                    [
+                        'id' => 922,
+                        'nombre' => 'Emprende',
+                        'id_programa' => 147,
+                        'url' => 'emprende',
+                        'categoria' => 'trabajo',
+                        'descripcion' => 'Fondos concursables para nuevos negocios'
+                    ]
+                ]
+            ], 200)
+        ]);
+
+        $response = $this->getJson('/api/v1/beneficios-procesados');
+
+        $response->assertStatus(200);
+        
+        $data = $response->json('data');
+        $beneficios = $data[0]['beneficios'];
+        
+        // Verificar que dentro del año están ordenados por fecha descendente
+        $this->assertEquals('2023-12-09', $beneficios[0]['fecha']);
+        $this->assertEquals('2023-06-09', $beneficios[1]['fecha']);
+        $this->assertEquals('2023-01-09', $beneficios[2]['fecha']);
+    }
+
+    public function test_beneficios_endpoint_returns_raw_data()
+    {
+        Http::fake([
+            'https://run.mocky.io/v3/8f75c4b5-ad90-49bb-bc52-f1fc0b4aad02' => Http::response([
+                'code' => 200,
+                'success' => true,
+                'data' => [
+                    [
+                        'id_programa' => 147,
+                        'monto' => 40656,
+                        'fecha_recepcion' => '09/11/2023',
+                        'fecha' => '2023-11-09'
+                    ]
+                ]
+            ], 200)
+        ]);
+
+        $response = $this->getJson('/api/v1/beneficios');
+
+        $response->assertStatus(200)
+                ->assertJsonStructure([
+                    'code',
+                    'success',
+                    'data' => [
+                        '*' => [
+                            'id_programa',
+                            'monto',
+                            'fecha_recepcion',
+                            'fecha'
+                        ]
+                    ]
+                ]);
+    }
+
+    public function test_filtros_endpoint_returns_raw_data()
+    {
+        Http::fake([
+            'https://run.mocky.io/v3/b0ddc735-cfc9-410e-9365-137e04e33fcf' => Http::response([
+                'code' => 200,
+                'success' => true,
+                'data' => [
+                    [
+                        'id_programa' => 147,
+                        'tramite' => 'Emprende',
+                        'min' => 0,
+                        'max' => 50000,
+                        'ficha_id' => 922
+                    ]
+                ]
+            ], 200)
+        ]);
+
+        $response = $this->getJson('/api/v1/filtros');
+
+        $response->assertStatus(200)
+                ->assertJsonStructure([
+                    'code',
+                    'success',
+                    'data' => [
+                        '*' => [
+                            'id_programa',
+                            'tramite',
+                            'min',
+                            'max',
+                            'ficha_id'
+                        ]
+                    ]
+                ]);
+    }
+
+    public function test_fichas_endpoint_returns_raw_data()
+    {
+        Http::fake([
+            'https://run.mocky.io/v3/4654cafa-58d8-4846-9256-79841b29a687' => Http::response([
+                'code' => 200,
+                'success' => true,
+                'data' => [
+                    [
+                        'id' => 922,
+                        'nombre' => 'Emprende',
+                        'id_programa' => 147,
+                        'url' => 'emprende',
+                        'categoria' => 'trabajo',
+                        'descripcion' => 'Fondos concursables para nuevos negocios'
+                    ]
+                ]
+            ], 200)
+        ]);
+
+        $response = $this->getJson('/api/v1/fichas');
+
+        $response->assertStatus(200)
+                ->assertJsonStructure([
+                    'code',
+                    'success',
+                    'data' => [
+                        '*' => [
+                            'id',
+                            'nombre',
+                            'id_programa',
+                            'url',
+                            'categoria',
+                            'descripcion'
+                        ]
+                    ]
+                ]);
+    }
+
+    public function test_multiple_api_failures_returns_error()
+    {
+        Http::fake([
+            'https://run.mocky.io/v3/8f75c4b5-ad90-49bb-bc52-f1fc0b4aad02' => Http::response([], 500),
+            'https://run.mocky.io/v3/b0ddc735-cfc9-410e-9365-137e04e33fcf' => Http::response([], 500),
+            'https://run.mocky.io/v3/4654cafa-58d8-4846-9256-79841b29a687' => Http::response([], 500)
+        ]);
+
+        $response = $this->getJson('/api/v1/beneficios-procesados');
+
+        $response->assertStatus(500)
+                ->assertJson([
+                    'code' => 500,
+                    'success' => false
+                ]);
+    }
 } 
