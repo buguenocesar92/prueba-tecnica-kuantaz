@@ -12,6 +12,7 @@ API REST desarrollada en Laravel para el procesamiento y gestión de beneficios 
 - [Endpoints](#-endpoints)
 - [Testing](#-testing)
 - [Documentación API](#-documentación-api)
+- [Colección de Postman](#-colección-de-postman)
 - [Estructura del Proyecto](#-estructura-del-proyecto)
 - [Tecnologías Utilizadas](#-tecnologías-utilizadas)
 
@@ -267,6 +268,87 @@ php artisan l5-swagger:generate --force
 # Ver configuración de Swagger
 php artisan config:show l5-swagger
 ```
+
+## 📮 Colección de Postman
+
+El proyecto incluye una **colección completa de Postman** para facilitar las pruebas de la API.
+
+### Archivos Incluidos
+
+- **`Kuantaz_API_Collection.postman_collection.json`**: Colección principal con todos los endpoints
+- **`Kuantaz_API_Environment.postman_environment.json`**: Variables de entorno para desarrollo local
+- **`POSTMAN_GUIDE.md`**: Guía completa de uso
+
+### Importar en Postman
+
+1. **Importar Colección**:
+   - Abre Postman
+   - Haz clic en "Import"
+   - Arrastra `Kuantaz_API_Collection.postman_collection.json`
+
+2. **Importar Entorno**:
+   - Ve a "Environments"
+   - Haz clic en "Import"
+   - Arrastra `Kuantaz_API_Environment.postman_environment.json`
+
+3. **Activar Entorno**:
+   - Selecciona "Kuantaz API - Local Development" en la esquina superior derecha
+
+### Estructura de la Colección
+
+#### 🎯 **Endpoints Principales**
+- **Beneficios Procesados**: Endpoint principal con tests automatizados
+
+#### 📚 **Documentación**
+- **Swagger UI**: Acceso a documentación interactiva
+- **API Docs JSON**: Especificación OpenAPI
+
+#### 🏠 **Navegación**
+- **Página Principal**: Redirección automática
+- **Documentación Alternativa**: Ruta alternativa
+
+#### 🧪 **Tests de Validación**
+- **Test de Conectividad**: Verificación básica del servidor
+- **Test de Performance**: Análisis de tiempos de respuesta
+
+### Tests Automatizados
+
+Cada endpoint incluye **tests automatizados** que verifican:
+
+- ✅ **Status codes** correctos (200, 302, etc.)
+- ✅ **Estructura JSON** apropiada
+- ✅ **Tipos de datos** correctos
+- ✅ **Lógica de negocio** (ordenamiento, cálculos)
+- ✅ **Performance** (tiempos de respuesta)
+- ✅ **Headers** apropiados
+
+### Variables de Entorno
+
+| Variable | Valor | Descripción |
+|----------|-------|-------------|
+| `base_url` | `http://127.0.0.1:8000` | URL base del servidor |
+| `api_version` | `v1` | Versión de la API |
+| `timeout` | `30000` | Timeout en milisegundos |
+
+### Uso Rápido
+
+```bash
+# 1. Iniciar servidor Laravel
+php artisan serve
+
+# 2. En Postman, ejecutar "Test de Conectividad"
+# 3. Ejecutar "Beneficios Procesados"
+# 4. Revisar resultados en la consola de Postman
+```
+
+### Métricas de Performance
+
+- **🚀 Excelente**: < 1 segundo
+- **✅ Bueno**: 1-3 segundos  
+- **⚠️ Aceptable**: 3-5 segundos
+- **🐌 Lento**: > 5 segundos
+
+Para más detalles, consulta **`POSTMAN_GUIDE.md`**.
 
 ## 📁 Estructura del Proyecto
 
