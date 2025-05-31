@@ -4,7 +4,7 @@
 [![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://github.com/buguenocesar92/prueba-tecnica-kuantaz)
 [![PHPStan](https://img.shields.io/badge/PHPStan-level%205-brightgreen)](https://phpstan.org/)
 [![Laravel Pint](https://img.shields.io/badge/Laravel%20Pint-passing-brightgreen)](https://laravel.com/docs/pint)
-[![Tests](https://img.shields.io/badge/tests-16%20passing-brightgreen)](https://github.com/buguenocesar92/prueba-tecnica-kuantaz)
+[![Tests](https://img.shields.io/badge/tests-46%20passing-brightgreen)](https://github.com/buguenocesar92/prueba-tecnica-kuantaz)
 [![PHP Version](https://img.shields.io/badge/php-%5E8.2-blue)](https://php.net)
 [![Laravel](https://img.shields.io/badge/laravel-12.x-red)](https://laravel.com)
 
@@ -31,7 +31,8 @@ API REST desarrollada en Laravel para el procesamiento y gestión de beneficios 
 - **Agrupación por Año**: Organiza beneficios por año en orden descendente
 - **Información Completa**: Incluye fichas detalladas de cada beneficio
 - **API RESTful**: Endpoint bien estructurado con respuestas JSON
-- **Testing Completo**: 16 tests unitarios y de integración con 56 aserciones (88% cobertura)
+- **Testing Completo**: 46 tests unitarios y de integración con 130 aserciones (100% cobertura)
+- **Arquitectura Limpia**: Implementación con DTOs, Repositories y Service Layer
 - **Documentación Swagger**: API documentada con OpenAPI
 - **Variables de Entorno**: Configuración flexible y segura
 - **Laravel Collections**: Uso extensivo para procesamiento eficiente
@@ -173,14 +174,27 @@ composer test-coverage
 
 ### Tests Incluidos
 
-#### Tests de Servicio (5 tests)
+#### Tests de DTOs (4 tests)
+- ✅ Creación correcta de FiltroDTOs desde arrays
+- ✅ Conversión a array de FiltroDTOs
+- ✅ Validación de montos válidos e inválidos
+- ✅ Métodos de validación de FiltroDTOs
+
+#### Tests de Modelos (5 tests)
+- ✅ Atributos fillable del modelo User
+- ✅ Atributos hidden del modelo User
+- ✅ Métodos de casting del modelo User
+- ✅ Traits utilizados por el modelo User
+- ✅ Instanciación correcta del modelo User
+
+#### Tests de Servicios (5 tests)
 - ✅ Procesamiento de beneficios con datos válidos
 - ✅ Filtrado por montos mínimos y máximos
 - ✅ Exclusión de beneficios sin filtros válidos
 - ✅ Exclusión de beneficios sin fichas
 - ✅ Ordenamiento por año descendente
 
-#### Tests de Endpoint (9 tests)
+#### Tests de Endpoints (9 tests)
 - ✅ Estructura correcta del JSON de respuesta
 - ✅ Filtrado por montos mínimos y máximos
 - ✅ Ordenamiento por año descendente
@@ -191,16 +205,29 @@ composer test-coverage
 - ✅ Ordenamiento interno por fecha ascendente
 - ✅ Múltiples fallos de APIs externas
 
+#### Tests de Providers (3 tests)
+- ✅ Registro correcto de bindings de interfaces
+- ✅ Ejecución sin errores del método boot
+- ✅ Registro correcto del provider en la aplicación
+
+#### Tests de Repositories (18 tests)
+- ✅ **BeneficiosRepository** (6 tests): Constructor, manejo de errores HTTP, timeouts, formatos inválidos y respuestas exitosas
+- ✅ **FichasRepository** (6 tests): Constructor, manejo de errores HTTP, timeouts, formatos inválidos y respuestas exitosas
+- ✅ **FiltrosRepository** (6 tests): Constructor, manejo de errores HTTP, timeouts, formatos inválidos y respuestas exitosas
+
 #### Tests Básicos (2 tests)
 - ✅ Test unitario básico
 - ✅ Test de aplicación básico
 
 ### Estadísticas de Testing
 
-- **Total Tests**: 16
-- **Total Aserciones**: 56
-- **Cobertura**: 88%
-- **Tiempo Promedio**: ~0.5 segundos
+- **Total Tests**: 46
+- **Total Aserciones**: 130
+- **Cobertura**: 100%
+- **Tiempo Promedio**: ~1.5 segundos
+- **Líneas Cubiertas**: 173/173
+- **Funciones Cubiertas**: 32/32
+- **Clases Cubiertas**: 11/11
 
 ## 🔧 Herramientas de Calidad de Código
 
@@ -363,9 +390,21 @@ Para más detalles, consulta **`POSTMAN_GUIDE.md`**.
 ```
 prueba-tecnica-kuantaz/
 ├── app/
+│   ├── DTOs/                               # Data Transfer Objects
+│   │   ├── BeneficioDTO.php               # DTO para beneficios
+│   │   ├── FichaDTO.php                   # DTO para fichas
+│   │   └── FiltroDTO.php                  # DTO para filtros
 │   ├── Http/
 │   │   └── Controllers/
 │   │       └── BeneficiosController.php    # Controlador principal
+│   ├── Models/
+│   │   └── User.php                        # Modelo de usuario
+│   ├── Providers/
+│   │   └── RepositoryServiceProvider.php   # Provider para repositories
+│   ├── Repositories/                       # Capa de repositorios
+│   │   ├── BeneficiosRepository.php       # Repository para beneficios
+│   │   ├── FichasRepository.php           # Repository para fichas
+│   │   └── FiltrosRepository.php          # Repository para filtros
 │   └── Services/
 │       └── BeneficiosService.php           # Lógica de negocio
 ├── routes/
@@ -373,13 +412,26 @@ prueba-tecnica-kuantaz/
 │   └── web.php                             # Rutas web básicas
 ├── tests/
 │   ├── Feature/
-│   │   └── BeneficiosTest.php              # Tests de endpoint
+│   │   ├── BeneficiosTest.php              # Tests de endpoint
+│   │   ├── ExampleTest.php                 # Test básico de aplicación
+│   │   ├── Providers/
+│   │   │   └── RepositoryServiceProviderTest.php # Tests de providers
+│   │   └── Repositories/                   # Tests de repositories
+│   │       ├── BeneficiosRepositoryTest.php
+│   │       ├── FichasRepositoryTest.php
+│   │       └── FiltrosRepositoryTest.php
 │   └── Unit/
+│       ├── DTOs/
+│       │   └── FiltroDTOTest.php           # Tests de DTOs
+│       ├── ExampleTest.php                 # Test unitario básico
+│       ├── Models/
+│       │   └── UserTest.php                # Tests de modelos
 │       └── Services/
 │           └── BeneficiosServiceTest.php   # Tests de servicio
 ├── .github/
 │   └── workflows/
 │       └── ci.yml                          # GitHub Actions CI/CD
+├── coverage-html/                          # Reportes de cobertura HTML
 ├── scripts/
 │   └── update-coverage-badge.php           # Script para actualizar badge
 ├── .env                                    # Variables de entorno
@@ -389,6 +441,16 @@ prueba-tecnica-kuantaz/
 
 ### Componentes Principales
 
+#### **Capa de DTOs**
+- **BeneficioDTO**: Estructura de datos para beneficios
+- **FichaDTO**: Estructura de datos para fichas
+- **FiltroDTO**: Estructura de datos para filtros con validaciones
+
+#### **Capa de Repositories**
+- **BeneficiosRepository**: Manejo de datos de beneficios desde API externa
+- **FichasRepository**: Manejo de datos de fichas desde API externa
+- **FiltrosRepository**: Manejo de datos de filtros desde API externa
+
 #### **BeneficiosController**
 - Único controlador de la API
 - Documentación Swagger completa
@@ -396,8 +458,12 @@ prueba-tecnica-kuantaz/
 
 #### **BeneficiosService**
 - Lógica de negocio separada
-- Consumo de APIs externas
+- Consumo de APIs externas a través de repositories
 - Procesamiento con Laravel Collections
+
+#### **RepositoryServiceProvider**
+- Registro de bindings para inyección de dependencias
+- Configuración de interfaces y implementaciones
 
 ## 🔧 Tecnologías Utilizadas
 
@@ -407,10 +473,18 @@ prueba-tecnica-kuantaz/
 - **Guzzle HTTP**: Cliente HTTP para APIs externas
 - **Laravel Collections**: Procesamiento eficiente de datos
 
+### Arquitectura y Patrones
+- **Repository Pattern**: Abstracción de la capa de datos
+- **Data Transfer Objects (DTOs)**: Estructuras de datos tipadas
+- **Service Layer**: Separación de lógica de negocio
+- **Dependency Injection**: Inyección de dependencias con Service Container
+- **Interface Segregation**: Interfaces específicas para cada repository
+
 ### Testing
 - **PHPUnit**: Framework de testing
 - **Laravel HTTP Tests**: Testing de endpoints
 - **HTTP Fake**: Mocking de APIs externas
+- **Code Coverage**: Análisis de cobertura con Xdebug
 
 ### Documentación
 - **Swagger/OpenAPI**: Documentación de API
@@ -424,6 +498,46 @@ prueba-tecnica-kuantaz/
 
 ## 🚀 Características Técnicas
 
+### Arquitectura Limpia
+
+El proyecto implementa una **arquitectura limpia** con separación clara de responsabilidades:
+
+#### **Capa de DTOs (Data Transfer Objects)**
+```php
+class FiltroDTO
+{
+    public function __construct(
+        public readonly int $idPrograma,
+        public readonly int $min,
+        public readonly int $max
+    ) {}
+
+    public function isMontoValid(int $monto): bool
+    {
+        return $monto >= $this->min && $monto <= $this->max;
+    }
+}
+```
+
+#### **Repository Pattern**
+```php
+interface BeneficiosRepositoryInterface
+{
+    public function getAll(): Collection;
+}
+
+class BeneficiosRepository implements BeneficiosRepositoryInterface
+{
+    public function getAll(): Collection
+    {
+        // Lógica de obtención de datos desde API externa
+        return collect($response['data'])->map(fn($item) => 
+            BeneficioDTO::fromArray($item)
+        );
+    }
+}
+```
+
 ### Uso de Laravel Collections
 
 El proyecto hace uso extensivo de Laravel Collections para procesamiento eficiente:
@@ -431,23 +545,36 @@ El proyecto hace uso extensivo de Laravel Collections para procesamiento eficien
 ```php
 $beneficiosFiltrados = $beneficiosCollection
     ->filter(function ($beneficio) use ($filtrosMap) {
-        $filtro = $filtrosMap->get($beneficio['id_programa']);
-        return $filtro && $beneficio['monto'] >= $filtro['min'] && 
-               $beneficio['monto'] <= $filtro['max'];
+        $filtro = $filtrosMap->get($beneficio->idPrograma);
+        return $filtro?->isMontoValid($beneficio->monto) ?? false;
     })
     ->map(function ($beneficio) use ($filtrosMap, $fichasMap) {
-        // Agregar información adicional
+        // Agregar información adicional con DTOs tipados
     })
     ->groupBy('ano')
     ->sortByDesc('ano');
+```
+
+### Inyección de Dependencias
+
+```php
+class BeneficiosService
+{
+    public function __construct(
+        private readonly BeneficiosRepositoryInterface $beneficiosRepository,
+        private readonly FiltrosRepositoryInterface $filtrosRepository,
+        private readonly FichasRepositoryInterface $fichasRepository
+    ) {}
+}
 ```
 
 ### Manejo de Errores
 
 - **Timeouts**: 30 segundos por request
 - **Fallbacks**: Valores por defecto en variables de entorno
-- **Validación**: Verificación de datos antes del procesamiento
+- **Validación**: Verificación de datos antes del procesamiento con DTOs
 - **Logging**: Manejo de excepciones con contexto
+- **Type Safety**: DTOs tipados para prevenir errores en runtime
 
 ### Optimizaciones
 
@@ -455,6 +582,8 @@ $beneficiosFiltrados = $beneficiosCollection
 - **Lazy Loading**: Procesamiento bajo demanda
 - **Memory Efficient**: Uso de Collections en lugar de arrays grandes
 - **HTTP Pooling**: Reutilización de conexiones HTTP
+- **Type Hints**: Tipado estricto en toda la aplicación
+- **Readonly Properties**: Inmutabilidad en DTOs
 
 ## 📝 Requisitos Cumplidos
 

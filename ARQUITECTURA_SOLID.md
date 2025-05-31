@@ -191,7 +191,7 @@ class BeneficiosController
 - **HTTP Fakes**: APIs externas mockeadas
 - **Cobertura**: Estructura de respuesta, filtros, ordenamiento, errores
 
-### **Total**: 16 tests, 56 aserciones, 100% cobertura
+### **Total**: 46 tests, 130 aserciones, 100% cobertura
 
 ## 🚀 Beneficios de la Nueva Arquitectura
 
@@ -294,7 +294,7 @@ class BeneficiosReportService
 La refactorización ha transformado exitosamente un controlador monolítico en una **arquitectura limpia y modular** que cumple todos los **principios SOLID**. El código es ahora más **mantenible**, **testeable** y **escalable**, preparado para futuros requisitos y cambios.
 
 ### **Impacto Técnico**
-- ✅ **16 tests** con **56 aserciones** (100% cobertura)
+- ✅ **46 tests** con **130 aserciones** (100% cobertura)
 - ✅ **5 principios SOLID** implementados
 - ✅ **Arquitectura limpia** con separación de capas
 - ✅ **Inyección de dependencias** configurada

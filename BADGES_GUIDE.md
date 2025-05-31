@@ -5,10 +5,10 @@
 Tu proyecto ahora tiene un sistema completo de badges que muestran el estado de calidad del código en GitHub:
 
 - ✅ **Badge de CI/CD** - Estado de GitHub Actions
-- ✅ **Badge de Cobertura** - Porcentaje de cobertura de tests (88%)
+- ✅ **Badge de Cobertura** - Porcentaje de cobertura de tests (100%)
 - ✅ **Badge de PHPStan** - Nivel de análisis estático (5)
 - ✅ **Badge de Laravel Pint** - Estado del formateador de código
-- ✅ **Badge de Tests** - Número de tests pasando (16)
+- ✅ **Badge de Tests** - Número de tests pasando (46)
 - ✅ **Badge de PHP** - Versión de PHP requerida (^8.2)
 - ✅ **Badge de Laravel** - Versión del framework (12.x)
 
@@ -16,10 +16,10 @@ Tu proyecto ahora tiene un sistema completo de badges que muestran el estado de 
 
 ```markdown
 [![CI](https://github.com/buguenocesar92/prueba-tecnica-kuantaz/workflows/CI/badge.svg)](https://github.com/buguenocesar92/prueba-tecnica-kuantaz/actions)
-[![Coverage](https://img.shields.io/badge/coverage-88%25-brightgreen)](https://github.com/buguenocesar92/prueba-tecnica-kuantaz)
+[![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://github.com/buguenocesar92/prueba-tecnica-kuantaz)
 [![PHPStan](https://img.shields.io/badge/PHPStan-level%205-brightgreen)](https://phpstan.org/)
 [![Laravel Pint](https://img.shields.io/badge/Laravel%20Pint-passing-brightgreen)](https://laravel.com/docs/pint)
-[![Tests](https://img.shields.io/badge/tests-16%20passing-brightgreen)](https://github.com/buguenocesar92/prueba-tecnica-kuantaz)
+[![Tests](https://img.shields.io/badge/tests-46%20passing-brightgreen)](https://github.com/buguenocesar92/prueba-tecnica-kuantaz)
 [![PHP Version](https://img.shields.io/badge/php-%5E8.2-blue)](https://php.net)
 [![Laravel](https://img.shields.io/badge/laravel-12.x-red)](https://laravel.com)
 ```
@@ -59,9 +59,9 @@ php scripts/update-coverage-badge.php
 **Salida esperada:**
 ```
 🔍 Extrayendo porcentaje de cobertura...
-📊 Cobertura encontrada: 88.02%
+📊 Cobertura encontrada: 100.00%
 📝 Actualizando badge en README.md...
-✅ Badge de cobertura actualizado exitosamente a 88.02%
+✅ Badge de cobertura actualizado exitosamente a 100.00%
 🎯 Recuerda hacer commit de los cambios en README.md
 ```
 
@@ -174,7 +174,7 @@ Cuando agregues nuevos tests:
 php artisan test --list | wc -l
 
 # 2. Actualizar manualmente en README.md
-[![Tests](https://img.shields.io/badge/tests-XX%20passing-brightgreen)](https://github.com/buguenocesar92/prueba-tecnica-kuantaz)
+[![Tests](https://img.shields.io/badge/tests-46%20passing-brightgreen)](https://github.com/buguenocesar92/prueba-tecnica-kuantaz)
 ```
 
 ### **Actualizar Badge de PHPStan**
